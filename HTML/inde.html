@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackout | Cybersecurity Mind. Builder. Strategist.</title>
+    <meta name="description" content="Portfolio of Blackout (Emmanuel) - Blue Team Cybersecurity Enthusiast, Flask Developer, and Strategic Thinker">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Three.js for Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        blackout: {
+                            950: '#0a0a0f',
+                            900: '#12121a',
+                            800: '#1a1a25',
+                            700: '#252538',
+                            accent: '#00f0ff',
+                            accent2: '#00ff88',
+                            muted: '#6b7280'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 15px #00f0ff' },
+                            '100%': { boxShadow: '0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 30px #00f0ff' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0a0a0f;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1a1a25;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+
+        /* Grid Background */
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+        }
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #00ffff;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 85px, 0); }
+            20% { clip: rect(63px, 9999px, 130px, 0); }
+            40% { clip: rect(25px, 9999px, 15px, 0); }
+            60% { clip: rect(88px, 9999px, 95px, 0); }
+            80% { clip: rect(42px, 9999px, 68px, 0); }
+            100% { clip: rect(15px, 9999px, 120px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(20px, 9999px, 45px, 0); }
+            40% { clip: rect(90px, 9999px, 110px, 0); }
+            60% { clip: rect(35px, 9999px, 75px, 0); }
+            80% { clip: rect(70px, 9999px, 125px, 0); }
+            100% { clip: rect(50px, 9999px, 85px, 0); }
+        }
+
+        /* Terminal Cursor */
+        .cursor-blink::after {
+            content: '_';
+            animation: blink 1s step-end infinite;
+            color: #00f0ff;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Skill Bar Animation */
+        .skill-fill {
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+
+        /* Card Hover Effects */
+        .cyber-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+        }
+        .cyber-card:hover {
+            border-color: rgba(0, 240, 255, 0.5);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0f;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .loader-b {
+            font-size: 8rem;
+            font-weight: 800;
+            color: transparent;
+            -webkit-text-stroke: 2px #00f0ff;
+            position: relative;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .loader-b::before {
+            content: 'B';
+            position: absolute;
+            color: #00f0ff;
+            filter: blur(20px);
+            opacity: 0.5;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(0, 240, 255, 1)); }
+        }
+
+        /* Particle Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navigation Blur */
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 15, 0.8);
+        }
+
+        /* Text Selection */
+        ::selection {
+            background: rgba(0, 240, 255, 0.3);
+            color: #fff;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="cyber-grid relative">
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-b">B</div>
+        <div class="mt-4 font-mono text-blackout-accent text-sm tracking-widest animate-pulse">INITIALIZING...</div>
+    </div>
+
+    <!-- Particle Background -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-white/5 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="text-2xl font-bold text-blackout-accent font-mono">B</span>
+                    <span class="text-xl font-bold tracking-tight">BLACKOUT</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-sm font-medium text-gray-300 hover:text-blackout-accent transition-colors">About</a>
+                    <a href="#skills" class="text-sm font-medium text-gray-300 hover:text-blackout-accent transition-colors">Skills</a>
+                    <a href="#projects" class="text-sm font-medium text-gray-300 hover:text-blackout-accent transition-colors">Projects</a>
+                    <a href="#cyber-lab" class="text-sm font-medium text-gray-300 hover:text-blackout-accent transition-colors">Cyber Lab</a>
+                    <a href="#gaming" class="text-sm font-medium text-gray-300 hover:text-blackout-accent transition-colors">Gaming</a>
+                    <a href="#trading" class="text-sm font-medium text-gray-300 hover:text-blackout-accent transition-colors">Trading</a>
+                    <a href="#contact" class="px-4 py-2 rounded-full border border-blackout-accent text-blackout-accent hover:bg-blackout-accent hover:text-blackout-950 transition-all text-sm font-medium">Contact</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden nav-blur border-b border-white/5">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#about" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-blackout-accent">About</a>
+                <a href="#skills" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-blackout-accent">Skills</a>
+                <a href="#projects" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-blackout-accent">Projects</a>
+                <a href="#cyber-lab" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-blackout-accent">Cyber Lab</a>
+                <a href="#contact" class="block px-3 py-2 text-base font-medium text-blackout-accent">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="mb-6 inline-block">
+                <span class="px-4 py-2 rounded-full bg-blackout-accent/10 border border-blackout-accent/30 text-blackout-accent text-sm font-mono tracking-wider">
+                    <span class="cursor-blink">SECURE CONNECTION ESTABLISHED</span>
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight">
+                <span class="glitch block mb-2" data-text="BLACKOUT">BLACKOUT</span>
+                <span class="text-2xl md:text-3xl lg:text-4xl font-light text-gray-400 block mt-4 font-mono">
+                    Cybersecurity Mind. Builder. Strategist.
+                </span>
+            </h1>
+
+            <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-400 leading-relaxed">
+                Blue Team-focused ethical hacker in training. Building <span class="text-blackout-accent font-semibold">Blackout_Rules</span> — 
+                where defensive security meets real-time innovation.
+            </p>
+
+            <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#projects" class="group relative px-8 py-4 bg-blackout-accent text-blackout-950 font-bold rounded-lg overflow-hidden transition-all hover:scale-105">
+                    <span class="relative z-10 flex items-center gap-2">
+                        View Projects
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                </a>
+                <a href="#contact" class="px-8 py-4 border border-gray-600 text-gray-300 font-semibold rounded-lg hover:border-blackout-accent hover:text-blackout-accent transition-all hover:scale-105">
+                    Contact Me
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blackout-accent font-mono">4.8</div>
+                    <div class="text-sm text-gray-500 mt-1">CGPA Goal</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blackout-accent2 font-mono">Blue</div>
+                    <div class="text-sm text-gray-500 mt-1">Team Focus</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blackout-accent font-mono">24/7</div>
+                    <div class="text-sm text-gray-500 mt-1">Security Mindset</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blackout-accent2 font-mono">∞</div>
+                    <div class="text-sm text-gray-500 mt-1">Growth Mindset</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500"></i>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 reveal-left">
+                    <div class="inline-flex items-center gap-2 text-blackout-accent font-mono text-sm">
+                        <i data-lucide="terminal" class="w-4 h-4"></i>
+                        <span>ABOUT_ME.exe</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold">
+                        Defensive Security <br>
+                        <span class="text-blackout-accent">Practitioner</span>
+                    </h2>
+                    <div class="space-y-4 text-gray-400 leading-relaxed">
+                        <p>
+                            I'm Emmanuel, operating under the alias <span class="text-white font-semibold">Blackout</span>. As a university student pursuing a 4.8 CGPA, I've dedicated myself to mastering the art of defensive cybersecurity — protecting systems rather than exploiting them.
+                        </p>
+                        <p>
+                            My philosophy is simple: <span class="text-blackout-accent2">ethical hacking is about defense, not scamming</span>. I believe in understanding attack vectors to build stronger fortifications. Every vulnerability I study becomes knowledge for building more resilient systems.
+                        </p>
+                        <p>
+                            Beyond cybersecurity, I'm a strategic thinker — whether analyzing EUR/USD forex patterns, optimizing Clash of Clans base layouts, or improving my CODM accuracy through disciplined practice. I approach every challenge with a calm, methodical mindset.
+                        </p>
+                    </div>
+                    
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex items-center gap-2 text-sm text-gray-500">
+                            <i data-lucide="shield" class="w-4 h-4 text-blackout-accent"></i>
+                            <span>Blue Team Certified (In Progress)</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-500">
+                            <i data-lucide="code" class="w-4 h-4 text-blackout-accent2"></i>
+                            <span>Full Stack Developer</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative reveal-right">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blackout-accent to-blackout-accent2 opacity-20 blur-3xl rounded-full"></div>
+                    <div class="relative cyber-card bg-blackout-800/50 p-8 rounded-2xl">
+                        <div class="font-mono text-sm text-gray-500 mb-4">// PERSONAL_ATTRIBUTES</div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-gray-400">Mindset</span>
+                                <span class="text-blackout-accent font-mono">CALM_DISCIPLINED</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-gray-400">Approach</span>
+                                <span class="text-blackout-accent2 font-mono">STEP_BY_STEP</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-gray-400">Focus</span>
+                                <span class="text-blackout-accent font-mono">LONG_TERM</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-gray-400">Ambition</span>
+                                <span class="text-blackout-accent2 font-mono">HIGH</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <span class="text-gray-400">Status</span>
+                                <span class="text-green-400 font-mono flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                    BUILDING
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 bg-blackout-900/30 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <div class="inline-flex items-center gap-2 text-blackout-accent font-mono text-sm mb-4">
+                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                    <span>TECHNICAL_ARSENAL</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold">Skills & Expertise</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cybersecurity -->
+                <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl reveal-up" style="transition-delay: 0.1s">
+                    <div class="w-12 h-12 bg-blackout-accent/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-blackout-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Cybersecurity</h3>
+                    <p class="text-gray-400 text-sm mb-4">Blue Team fundamentals, SOC operations, and defensive strategies.</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-500">Blue Team Concepts</span>
+                            <span class="text-blackout-accent">85%</span>
+                        </div>
+                        <div class="h-2 bg-blackout-700 rounded-full overflow-hidden">
+                            <div class="skill-fill h-full bg-gradient-to-r from-blackout-accent to-blackout-accent2 rounded-full" data-width="85%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Development -->
+                <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl reveal-up" style="transition-delay: 0.2s">
+                    <div class="w-12 h-12 bg-blackout-accent2/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="code-2" class="w-6 h-6 text-blackout-accent2"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Development</h3>
+                    <p class="text-gray-400 text-sm mb-4">Real-time applications with Flask and Socket.IO architecture.</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-500">Flask + Socket.IO</span>
+                            <span class="text-blackout-accent2">90%</span>
+                        </div>
+                        <div class="h-2 bg-blackout-700 rounded-full overflow-hidden">
+                            <div class="skill-fill h-full bg-gradient-to-r from-blackout-accent2 to-blackout-accent rounded-full" data-width="90%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data & Content -->
+                <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl reveal-up" style="transition-delay: 0.3s">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="file-text" class="w-6 h-6 text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Data & Content</h3>
+                    <p class="text-gray-400 text-sm mb-4">Professional data entry and strategic content writing services.</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-500">Data Entry</span>
+                            <span class="text-purple-400">95%</span>
+                        </div>
+                        <div class="h-2 bg-blackout-700 rounded-full overflow-hidden">
+                            <div class="skill-fill h-full bg-purple-500 rounded-full" data-width="95%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trading -->
+                <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl reveal-up" style="transition-delay: 0.4s">
+                    <div class="w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="trending-up" class="w-6 h-6 text-yellow-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Forex Trading</h3>
+                    <p class="text-gray-400 text-sm mb-4">EUR/USD swing trading with strict risk management protocols.</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-500">Technical Analysis</span>
+                            <span class="text-yellow-400">80%</span>
+                        </div>
+                        <div class="h-2 bg-blackout-700 rounded-full overflow-hidden">
+                            <div class="skill-fill h-full bg-yellow-500 rounded-full" data-width="80%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gaming Strategy -->
+                <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl reveal-up" style="transition-delay: 0.5s">
+                    <div class="w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="gamepad-2" class="w-6 h-6 text-red-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Strategic Gaming</h3>
+                    <p class="text-gray-400 text-sm mb-4">CODM accuracy training and Clash of Clans base optimization.</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-500">Strategic Analysis</span>
+                            <span class="text-red-400">88%</span>
+                        </div>
+                        <div class="h-2 bg-blackout-700 rounded-full overflow-hidden">
+                            <div class="skill-fill h-full bg-red-500 rounded-full" data-width="88%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning -->
+                <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl reveal-up" style="transition-delay: 0.6s">
+                    <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="brain" class="w-6 h-6 text-blue-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Continuous Learning</h3>
+                    <p class="text-gray-400 text-sm mb-4">Step-by-step methodology with structured improvement protocols.</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-500">Adaptability</span>
+                            <span class="text-blue-400">92%</span>
+                        </div>
+                        <div class="h-2 bg-blackout-700 rounded-full overflow-hidden">
+                            <div class="skill-fill h-full bg-blue-500 rounded-full" data-width="92%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <div class="inline-flex items-center gap-2 text-blackout-accent font-mono text-sm mb-4">
+                    <i data-lucide="folder-code" class="w-4 h-4"></i>
+                    <span>PROJECT_REPOSITORY</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold">Featured Projects</h2>
+                <p class="mt-4 text-gray-400">Building the <span class="text-blackout-accent font-semibold">Blackout_Rules</span> ecosystem</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Blackout_Rules -->
+                <div class="cyber-card bg-blackout-800/30 rounded-2xl overflow-hidden group reveal-up">
+                    <div class="h-48 bg-gradient-to-br from-blackout-accent/20 to-blackout-accent2/20 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-6xl font-bold text-white/10">B_R</span>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="px-3 py-1 bg-blackout-950/80 rounded-full text-xs font-mono text-blackout-accent border border-blackout-accent/30">FLAGSHIP</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 group-hover:text-blackout-accent transition-colors">Blackout_Rules</h3>
+                        <p class="text-gray-400 mb-4">Dark-themed social interaction platform with real-time features. A secure space for meaningful digital connections.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Flask</span>
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Socket.IO</span>
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Security-First</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="flex-1 py-2 bg-blackout-accent text-blackout-950 font-semibold rounded-lg hover:bg-blackout-accent/90 transition-colors">
+                                View Demo
+                            </button>
+                            <button class="px-4 py-2 border border-gray-600 rounded-lg hover:border-blackout-accent hover:text-blackout-accent transition-colors">
+                                <i data-lucide="github" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real-time Chat -->
+                <div class="cyber-card bg-blackout-800/30 rounded-2xl overflow-hidden group reveal-up" style="transition-delay: 0.1s">
+                    <div class="h-48 bg-gradient-to-br from-purple-500/20 to-blue-500/20 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="message-square" class="w-20 h-20 text-white/10"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 group-hover:text-blackout-accent2 transition-colors">SecureChat Server</h3>
+                        <p class="text-gray-400 mb-4">Real-time chat application built with Flask and Socket.IO featuring end-to-end encryption concepts and secure message handling.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Python</span>
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">WebSocket</span>
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Real-time</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="flex-1 py-2 bg-blackout-accent2 text-blackout-950 font-semibold rounded-lg hover:bg-blackout-accent2/90 transition-colors">
+                                Live Chat
+                            </button>
+                            <button class="px-4 py-2 border border-gray-600 rounded-lg hover:border-blackout-accent2 hover:text-blackout-accent2 transition-colors">
+                                <i data-lucide="code" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trading Journal -->
+                <div class="cyber-card bg-blackout-800/30 rounded-2xl overflow-hidden group reveal-up" style="transition-delay: 0.2s">
+                    <div class="h-48 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="line-chart" class="w-20 h-20 text-white/10"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 group-hover:text-yellow-400 transition-colors">TradeJournal Pro</h3>
+                        <p class="text-gray-400 mb-4">Comprehensive trading journal system for EUR/USD swing traders. Track setups, emotions, and performance metrics.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Data Analysis</span>
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Risk Management</span>
+                        </div>
+                        <button class="w-full py-2 border border-yellow-500/50 text-yellow-400 rounded-lg hover:bg-yellow-500/10 transition-colors">
+                            Concept Phase
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Instagram Strategy -->
+                <div class="cyber-card bg-blackout-800/30 rounded-2xl overflow-hidden group reveal-up" style="transition-delay: 0.3s">
+                    <div class="h-48 bg-gradient-to-br from-pink-500/20 to-rose-500/20 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="instagram" class="w-20 h-20 text-white/10"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 group-hover:text-pink-400 transition-colors">Content Strategy Engine</h3>
+                        <p class="text-gray-400 mb-4">Automated content planning system for Instagram Reels with analytics tracking and optimal posting time algorithms.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Content Writing</span>
+                            <span class="px-3 py-1 bg-blackout-700 rounded-full text-xs">Strategy</span>
+                        </div>
+                        <button class="w-full py-2 border border-pink-500/50 text-pink-400 rounded-lg hover:bg-pink-500/10 transition-colors">
+                            View Strategy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cyber Lab Section -->
+    <section id="cyber-lab" class="py-24 bg-blackout-900/50 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(0,240,255,0.15) 1px, transparent 0); background-size: 40px 40px;"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal-up">
+                <div class="inline-flex items-center gap-2 text-red-400 font-mono text-sm mb-4">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                    <span>SECURITY_OPERATIONS_CENTER</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold">Cyber Lab</h2>
+                <p class="mt-4 text-gray-400">Ethical hacking learning journey and Blue Team operations</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Blue Team Labs -->
+                <div class="cyber-card bg-blackout-950/50 border-red-500/20 p-6 rounded-xl reveal-up">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center">
+                            <i data-lucide="shield" class="w-6 h-6 text-red-400"></i>
+                        </div>
+                        <span class="text-xs font-mono text-red-400">ACTIVE</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-red-100">Blue Team Labs</h3>
+                    <p class="text-gray-400 text-sm mb-4">Hands-on defensive security practice including SOC monitoring, incident response, and threat detection.</p>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-red-400"></i>
+                            SIEM Log Analysis
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-red-400"></i>
+                            Network Monitoring
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="loader" class="w-4 h-4 text-gray-600"></i>
+                            Incident Response
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- CTF Challenges -->
+                <div class="cyber-card bg-blackout-950/50 border-blackout-accent/20 p-6 rounded-xl reveal-up" style="transition-delay: 0.1s">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-blackout-accent/10 rounded-lg flex items-center justify-center">
+                            <i data-lucide="flag" class="w-6 h-6 text-blackout-accent"></i>
+                        </div>
+                        <span class="text-xs font-mono text-blackout-accent">IN_PROGRESS</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-blackout-accent">CTF Challenges</h3>
+                    <p class="text-gray-400 text-sm mb-4">Capture The Flag competitions to sharpen offensive security understanding for better defense.</p>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="loader" class="w-4 h-4 text-blackout-accent"></i>
+                            Web Exploitation
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="loader" class="w-4 h-4 text-blackout-accent"></i>
+                            Cryptography
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="circle" class="w-4 h-4 text-gray-600"></i>
+                            Reverse Engineering
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Security Analysis -->
+                <div class="cyber-card bg-blackout-950/50 border-blackout-accent2/20 p-6 rounded-xl reveal-up" style="transition-delay: 0.2s">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-blackout-accent2/10 rounded-lg flex items-center justify-center">
+                            <i data-lucide="search" class="w-6 h-6 text-blackout-accent2"></i>
+                        </div>
+                        <span class="text-xs font-mono text-blackout-accent2">PLANNED</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-blackout-accent2">Log Analysis</h3>
+                    <p class="text-gray-400 text-sm mb-4">Deep dive into system logs, network traffic analysis, and anomaly detection techniques.</p>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="circle" class="w-4 h-4 text-gray-600"></i>
+                            Windows Event Logs
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="circle" class="w-4 h-4 text-gray-600"></i>
+                            Linux Syslog Analysis
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="circle" class="w-4 h-4 text-gray-600"></i>
+                            Network Traffic Forensics
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Terminal Window -->
+            <div class="mt-12 cyber-card bg-blackout-950 rounded-lg overflow-hidden reveal-up">
+                <div class="bg-blackout-800 px-4 py-2 flex items-center gap-2">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <span class="ml-4 text-xs font-mono text-gray-400">blackout@cyber-lab:~</span>
+                </div>
+                <div class="p-6 font-mono text-sm text-green-400 space-y-2">
+                    <p><span class="text-blue-400">blackout@lab</span>:<span class="text-white">~</span>$ sudo init_security_protocols</p>
+                    <p class="text-gray-500">[OK] Loading Blue Team modules...</p>
+                    <p class="text-gray-500">[OK] Initializing SOC monitoring...</p>
+                    <p class="text-gray-500">[OK] Threat detection algorithms active</p>
+                    <p><span class="text-blue-400">blackout@lab</span>:<span class="text-white">~</span>$ <span class="cursor-blink text-white"></span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gaming & Trading Split Section -->
+    <section class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Gaming Section -->
+                <div id="gaming" class="reveal-left">
+                    <div class="inline-flex items-center gap-2 text-red-400 font-mono text-sm mb-4">
+                        <i data-lucide="gamepad" class="w-4 h-4"></i>
+                        <span>TACTICAL_OPERATIONS</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Gaming Strategy</h2>
+                    
+                    <div class="space-y-6">
+                        <!-- CODM -->
+                        <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-xl font-bold text-red-400">Call of Duty Mobile</h3>
+                                    <p class="text-sm text-gray-500">Accuracy Improvement Journey</p>
+                                </div>
+                                <i data-lucide="target" class="w-8 h-8 text-red-400/50"></i>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Current Accuracy</span>
+                                    <span class="text-red-400 font-mono">24.5%</span>
+                                </div>
+                                <div class="h-2 bg-blackout-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-red-500 rounded-full" style="width: 24.5%"></div>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Target</span>
+                                    <span class="text-blackout-accent2 font-mono">35%</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex gap-2">
+                                <span class="px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-xs">Daily Training</span>
+                                <span class="px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-xs">Focus: ADS Speed</span>
+                            </div>
+                        </div>
+
+                        <!-- Clash of Clans -->
+                        <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-xl font-bold text-yellow-400">Clash of Clans</h3>
+                                    <p class="text-sm text-gray-500">Base Building & Strategy</p>
+                                </div>
+                                <i data-lucide="castle" class="w-8 h-8 text-yellow-400/50"></i>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Applying cybersecurity defense principles to base layout optimization. 
+                                Layered defense, trap placement, and resource protection strategies.
+                            </p>
+                            <div class="flex items-center gap-4 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="shield" class="w-4 h-4 text-yellow-400"></i>
+                                    <span class="text-gray-300">Anti-3 Star</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="layout" class="w-4 h-4 text-yellow-400"></i>
+                                    <span class="text-gray-300">Compartmentalization</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trading Section -->
+                <div id="trading" class="reveal-right">
+                    <div class="inline-flex items-center gap-2 text-yellow-400 font-mono text-sm mb-4">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                        <span>MARKET_ANALYSIS</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Forex Trading</h2>
+                    
+                    <div class="cyber-card bg-blackout-800/30 p-6 rounded-xl h-full">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="text-2xl font-bold text-yellow-400">EUR/USD</h3>
+                                <p class="text-sm text-gray-500">Swing Trading Specialist</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-blackout-accent2">1.0845</div>
+                                <div class="text-xs text-green-400 flex items-center justify-end gap-1">
+                                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                                    +0.23%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-blackout-950/50 p-4 rounded-lg">
+                                    <div class="text-xs text-gray-500 mb-1">Risk per Trade</div>
+                                    <div class="text-lg font-bold text-yellow-400">1-2%</div>
+                                </div>
+                                <div class="bg-blackout-950/50 p-4 rounded-lg">
+                                    <div class="text-xs text-gray-500 mb-1">Timeframe</div>
+                                    <div class="text-lg font-bold text-yellow-400">4H / Daily</div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <h4 class="font-semibold text-gray-300 flex items-center gap-2">
+                                    <i data-lucide="scale" class="w-4 h-4 text-yellow-400"></i>
+                                    Trading Principles
+                                </h4>
+                                <ul class="space-y-2 text-sm text-gray-400">
+                                    <li class="flex items-start gap-2">
+                                        <i data-lucide="check" class="w-4 h-4 text-blackout-accent2 mt-0.5"></i>
+                                        <span>Strict risk management protocols</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i data-lucide="check" class="w-4 h-4 text-blackout-accent2 mt-0.5"></i>
+                                        <span>Emotional control and discipline</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i data-lucide="check" class="w-4 h-4 text-blackout-accent2 mt-0.5"></i>
+                                        <span>Technical analysis & price action</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i data-lucide="check" class="w-4 h-4 text-blackout-accent2 mt-0.5"></i>
+                                        <span>Patience for A+ setups only</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="p-4 bg-yellow-500/5 border border-yellow-500/20 rounded-lg">
+                                <p class="text-xs text-yellow-200/80 italic">
+                                    "The goal is not to predict the market, but to protect capital while waiting for high-probability setups."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personal Growth Section -->
+    <section class="py-24 bg-blackout-900/30 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <div class="inline-flex items-center gap-2 text-blackout-accent2 font-mono text-sm mb-4">
+                    <i data-lucide="trending-up" class="w-4 h-4"></i>
+                    <span>CONTINUOUS_IMPROVEMENT</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold">Personal Growth</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center reveal-up">
+                    <div class="w-20 h-20 mx-auto mb-6 bg-blackout-accent/10 rounded-full flex items-center justify-center">
+                        <i data-lucide="footprints" class="w-10 h-10 text-blackout-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Step-by-Step</h3>
+                    <p class="text-gray-400 text-sm">
+                        Methodical learner who breaks complex challenges into manageable steps. 
+                        No shortcuts, just consistent progress.
+                    </p>
+                </div>
+
+                <div class="text-center reveal-up" style="transition-delay: 0.1s">
+                    <div class="w-20 h-20 mx-auto mb-6 bg-blackout-accent2/10 rounded-full flex items-center justify-center">
+                        <i data-lucide="eye" class="w-10 h-10 text-blackout-accent2"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Long-Term Vision</h3>
+                    <p class="text-gray-400 text-sm">
+                        Building for the future, not quick wins. Every action aligns with the 4.8 CGPA goal 
+                        and cybersecurity career path.
+                    </p>
+                </div>
+
+                <div class="text-center reveal-up" style="transition-delay: 0.2s">
+                    <div class="w-20 h-20 mx-auto mb-6 bg-purple-500/10 rounded-full flex items-center justify-center">
+                        <i data-lucide="mountain" class="w-10 h-10 text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">High Ambition</h3>
+                    <p class="text-gray-400 text-sm">
+                        Calm on the surface, driven underneath. Maintaining focus while building 
+                        the Blackout_Rules brand legacy.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Academic Goals -->
+            <div class="mt-16 cyber-card bg-blackout-800/30 p-8 rounded-2xl max-w-3xl mx-auto reveal-up">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold">Academic Excellence</h3>
+                    <span class="text-4xl font-bold text-blackout-accent font-mono">4.8</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Current Progress</span>
+                        <span class="text-blackout-accent font-mono">4.5/4.8</span>
+                    </div>
+                    <div class="h-3 bg-blackout-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-blackout-accent to-blackout-accent2 rounded-full" style="width: 94%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 text-center">
+                        Target CGPA: 4.8 | Status: On Track | Next Milestone: Final Year Project
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <div class="inline-flex items-center gap-2 text-blackout-accent font-mono text-sm mb-4">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                    <span>ESTABLISH_CONNECTION</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold">Get In Touch</h2>
+                <p class="mt-4 text-gray-400">Ready to collaborate or discuss security?</p>
+            </div>
+
+            <div class="cyber-card bg-blackout-800/30 p-8 md:p-12 rounded-2xl reveal-up">
+                <form class="space-y-6" onsubmit="event.preventDefault(); alert('Message encrypted and sent!');">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-400">Name</label>
+                            <input type="text" class="w-full px-4 py-3 bg-blackout-950 border border-blackout-700 rounded-lg focus:border-blackout-accent focus:outline-none focus:ring-1 focus:ring-blackout-accent text-white placeholder-gray-600 transition-all" placeholder="John Doe">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-400">Email</label>
+                            <input type="email" class="w-full px-4 py-3 bg-blackout-950 border border-blackout-700 rounded-lg focus:border-blackout-accent focus:outline-none focus:ring-1 focus:ring-blackout-accent text-white placeholder-gray-600 transition-all" placeholder="john@example.com">
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-400">Subject</label>
+                        <select class="w-full px-4 py-3 bg-blackout-950 border border-blackout-700 rounded-lg focus:border-blackout-accent focus:outline-none focus:ring-1 focus:ring-blackout-accent text-white transition-all">
+                            <option>Security Consultation</option>
+                            <option>Project Collaboration</option>
+                            <option>Freelance Work</option>
+                            <option>General Inquiry</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-400">Message</label>
+                        <textarea rows="5" class="w-full px-4 py-3 bg-blackout-950 border border-blackout-700 rounded-lg focus:border-blackout-accent focus:outline-none focus:ring-1 focus:ring-blackout-accent text-white placeholder-gray-600 transition-all resize-none" placeholder="Your message here..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-blackout-accent text-blackout-950 font-bold rounded-lg hover:bg-blackout-accent/90 transition-all flex items-center justify-center gap-2 group">
+                        <span>Send Secure Message</span>
+                        <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+
+                    <div class="text-center text-xs text-gray-600 font-mono">
+                        <i data-lucide="lock" class="w-3 h-3 inline mr-1"></i>
+                        End-to-end encryption simulated
+                    </div>
+                </form>
+
+                <div class="mt-12 pt-8 border-t border-white/5 flex justify-center gap-6">
+                    <a href="#" class="w-12 h-12 bg-blackout-950 rounded-full flex items-center justify-center border border-blackout-700 hover:border-blackout-accent hover:text-blackout-accent transition-all">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 bg-blackout-950 rounded-full flex items-center justify-center border border-blackout-700 hover:border-blackout-accent hover:text-blackout-accent transition-all">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 bg-blackout-950 rounded-full flex items-center justify-center border border-blackout-700 hover:border-blackout-accent hover:text-blackout-accent transition-all">
+                        <i data-lucide="twitter" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 bg-blackout-950 rounded-full flex items-center justify-center border border-blackout-700 hover:border-blackout-accent hover:text-blackout-accent transition-all">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/5 bg-blackout-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl font-bold text-blackout-accent font-mono">B</span>
+                <span class="text-gray-400">Built by Blackout.</span>
+            </div>
+            <div class="text-sm text-gray-600 font-mono">
+                <span class="text-blackout-accent">©</span> 2024 Blackout_Rules. All systems secure.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                loader.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    initAnimations();
+                }, 500);
+            }, 2000);
+        });
+
+        // Particle Background
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 240, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            // Connect particles
+            particles.forEach((a, index) => {
+                particles.slice(index + 1).forEach(b => {
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.1 * (1 - distance/100)})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // GSAP Animations
+        function initAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Reveal animations
+            gsap.utils.toArray('.reveal-up').forEach(elem => {
+                gsap.fromTo(elem, 
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: "top 85%",
+                            toggleActions: "play none none reverse"
+                        }
+                    }
+                );
+            });
+
+            gsap.utils.toArray('.reveal-left').forEach(elem => {
+                gsap.fromTo(elem,
+                    { opacity: 0, x: -50 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 0.8,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: "top 85%",
+                        }
+                    }
+                );
+            });
+
+            gsap.utils.toArray('.reveal-right').forEach(elem => {
+                gsap.fromTo(elem,
+                    { opacity: 0, x: 50 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 0.8,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: "top 85%",
+                        }
+                    }
+                );
+            });
+
+            // Skill bars animation
+            gsap.utils.toArray('.skill-fill').forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                gsap.to(bar, {
+                    width: width,
+                    duration: 1.5,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: bar,
+                        start: "top 90%",
+                    }
+                });
+            });
+        }
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Navigation background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg');
+                nav.classList.add('shadow-blackout-accent/5');
+            } else {
+                nav.classList.remove('shadow-lg');
+                nav.classList.remove('shadow-blackout-accent/5');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Interactive hover effects for cards
+        document.querySelectorAll('.cyber-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
